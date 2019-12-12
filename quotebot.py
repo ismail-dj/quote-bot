@@ -37,4 +37,5 @@ async def on_message(message):
         with open('picturefolder/mypicture.png', 'rb') as picture:
             await channel.send(file=discord.File(picture))
 
+
 client.run(token)
