@@ -14,7 +14,7 @@ client = discord.Client()
 def draw_picture(mymsg):
     folder = r"picturefolder/"
     a = choice(os.listdir(folder))
-    file = folder +a
+    file = folder + a
     W, H = (300, 200)
     msg = "\n".join(textwrap.wrap(mymsg, width=50))
     background = Image.open(file)
