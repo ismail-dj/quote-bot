@@ -1,25 +1,28 @@
 import os
 import discord
 from dotenv import load_dotenv
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import textwrap
-
+from random import choice
 
 load_dotenv()
 token = os.getenv("DISCORD_TOKEN")
-
 
 client = discord.Client()
 
 
 def draw_picture(mymsg):
-    W, H = (300,200)
+    folder = r"picturefolder/"
+    a = choice(os.listdir(folder))
+    file = folder +a
+    W, H = (300, 200)
     msg = "\n".join(textwrap.wrap(mymsg, width=50))
-    im = Image.new("RGBA", (W, H), "yellow")
-    draw = ImageDraw.Draw(im)
+    background = Image.open(file)
+    im = Image.new("RGBA", (W, H), "black")
+    draw = ImageDraw.Draw(background)
     w, h = draw.textsize(msg)
-    draw.text(((W - w) / 2, (H - h) / 2), msg, fill="black")
-    im.save("picturefolder/mypicture.png", "PNG")
+    draw.text(((W - w) / 2, (H - h) / 2), msg, fill="white")
+    background.save("picturefolder/mypicture.png", "PNG")
 
 
 @client.event
@@ -36,6 +39,7 @@ async def on_message(message):
         draw_picture("\"" + message.content + "\"" + "\n- %s" % message.author)
         with open('picturefolder/mypicture.png', 'rb') as picture:
             await channel.send(file=discord.File(picture))
+            os.remove('picturefolder/mypicture.png')
 
 
 client.run(token)
