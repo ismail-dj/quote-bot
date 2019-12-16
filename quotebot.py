@@ -34,12 +34,15 @@ async def on_message(message):
     channel = message.channel
     if message.author == client.user:
         return
-    rules = [
-        "don't quote me on that" in message.content.lower(),
-        len(message.content.lower()) <= 440,
-        client.user in message.mentions
+    sentences = [
+        "don't quote me on that",
+        "dont quote me on that"
     ]
-    if (rules[0] and rules[1]) or (rules[1] and rules[2]):
+    rules = [
+        client.user in message.mentions,
+        any(s in message.content.lower() for s in sentences)
+    ]
+    if any(rules) and len(message.content.lower()) <= 440:
         mycontent = message.content.replace("<" + "@!" + str(client.user.id) + ">", "").strip()
         mysentence = "\"" + mycontent + "\"" + f"\n-{message.author}"
         draw_picture(mysentence)
